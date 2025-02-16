@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<div class="registration-cssave">
+    <form id="register-form">
+        <h3 class="text-center">Sign up</h3>
+        <div class="form-group">
+            <input class="form-control item" type="text" name="username" maxlength="50" minlength="5" pattern="^[a-zA-Z0-9_.-]*$" id="username" placeholder="username" required>
+        </div>
+        <div class="form-group">
+            <input class="form-control item" type="password" name="password" minlength="8" id="password" placeholder="password" required>
+        </div>
+        <div class="form-group">
+            <input class="form-control item" type="email" name="email" id="email" placeholder="email" required>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary btn-block create-account" type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -28,11 +28,7 @@ def getkey() -> str:
 
 def gen_jwt(obj: str, include_time: bool) -> str:
     if include_time:
-        return jwt.encode(
-            {"data": obj, "time": time_ns()},
-            getkey(),
-            algorithm="HS256"
-            )
+        return jwt.encode({"data": obj, "time": time_ns()}, getkey(), algorithm="HS256")
     return jwt.encode({"data": obj}, getkey(), algorithm="HS256")
 
 
@@ -54,37 +50,49 @@ async def sign_up(user: schemas.UserReg, db: Session = Depends(get_db)):
         pwd_hash = pwd_context.hash(pwd)
         token = gen_jwt(user.email, True)
         user_id = str(uuid.uuid4())
-        us = crud.createUser(
-            db,
-            user_id,
-            user.name,
-            user.email,
-            pwd_hash,
-            token)
+        us = crud.createUser(db, user_id, user.name, user.email, pwd_hash, token)
         if not us:
             return JSONResponse(
                 status_code=409,
                 content={
                     "status": "error",
-                    "message": "Такой email уже зарегистрирован."},
-                    )
+                    "message": "Такой email уже зарегистрирован.",
+                },
+            )
     return schemas.UserResponse(token=token, id=user_id)
 
 
 @router.post("/sign-in", response_model=schemas.UserResponse)
-async def sign_in(user: schemas.UserAuth, db: Session = Depends(get_db)):
-    usr_db = crud.get(db, models.User, models.User.email, user.email)
-    if usr_db:
-        if pwd_context.verify(user.password, usr_db.password_hash):
-            token = gen_jwt(user.email, True)
-            usr_db.token = token
-            crud.updtoken(db, models.User, usr_db.id, token)
-            return schemas.UserResponse(token=token, id=usr_db.id)
+async def sign_in(user: schemas.UserAuthReg, db: Session = Depends(get_db)):
+    if "@" in user.login:
+        usr_db = crud.get(db, models.User, models.User.email, user.login)
+        if usr_db:
+            if pwd_context.verify(user.password, usr_db.password_hash):
+                token = gen_jwt(user.login, True)
+                usr_db.token = token
+                crud.updtoken(db, models.User, usr_db.id, token)
+                return schemas.UserResponse(token=token, id=usr_db.id)
+            else:
+                return JSONResponse(
+                    content={"message": "Error. Invalid password."}, status_code=403
+                )
         else:
-            return JSONResponse(content={
-                "message": "Error. Invalid password."
-            }, status_code=403)
+            return JSONResponse(
+                content={"message": "Error. User not found."}, status_code=404
+            )
     else:
-        return JSONResponse(content={
-            "message": "Error. User not found."
-        }, status_code=404)
+        usr_db = crud.getall(db, models.User, models.User.name, user.login)
+        if usr_db:
+            for x in usr_db:
+                if pwd_context.verify(user.password, x.password_hash):
+                    token = gen_jwt(x.email, True)
+                    x.token = token
+                    crud.updtoken(db, models.User, x.id, token)
+                    return schemas.UserResponse(token=token, id=x.id)
+            return JSONResponse(
+                content={"message": "Error. Invalid password."}, status_code=403
+            )
+        else:
+            return JSONResponse(
+                content={"message": "Error. User not found."}, status_code=404
+            )

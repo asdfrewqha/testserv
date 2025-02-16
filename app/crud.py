@@ -3,13 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import ProgrammingError
 
 
-def createUser(
-        db,
-        id: str,
-        name: str,
-        email: str,
-        pwd_hash: str,
-        token: str):
+def createUser(db, id: str, name: str, email: str, pwd_hash: str, token: str):
     try:
         existing_user = db.query(User).filter(User.email == email).first()
         if existing_user:
@@ -38,6 +32,13 @@ def get(db: Session, query, filter_q, filter):
         return None
 
 
+def getall(db: Session, query, filter_q, filter):
+    try:
+        return db.query(query).filter(filter_q == filter).all()
+    except ProgrammingError:
+        return None
+
+
 def read(
     db: Session,
     query,
@@ -57,6 +58,7 @@ def read(
         .limit(limit)
         .all()
     )
+
 
 def updtoken(db: Session, query, id: str, obj: str):
     upd = db.query(query).filter(query.id == id).first()
