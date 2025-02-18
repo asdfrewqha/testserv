@@ -45,7 +45,7 @@ async def sign_up(user: schemas.UserReg, db: Session = Depends(get_db)):
         or not re.search(r"[A-Z]", pwd)
         or not re.search(r"[!@#$%^&*()\-_=+[\]{};:'\",.<>?/]", pwd)
     ):
-        return badresponse("Invalid password.")
+        return badresponse("Easy password.")
     else:
         pwd_hash = pwd_context.hash(pwd)
         token = gen_jwt(user.email, True)

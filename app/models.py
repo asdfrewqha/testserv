@@ -1,6 +1,4 @@
 from sqlalchemy import Column, String
-
-# from sqlalchemy.orm import relationship
 from database import Base
 
 

@@ -50,6 +50,10 @@ async def signup_ep(request: Request):
 async def signin_ep(request: Request):
     return templates.TemplateResponse("sign_in.html", {"request": request})
 
+@app.get("/test")
+async def test(request: Request):
+    return templates.TemplateResponse("test.html", {"request": request})
+
 if __name__ == "__main__":
     server_address = os.getenv("SERVER_ADDRESS", "0.0.0.0:4000")
     host, port = server_address.split(":")

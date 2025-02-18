@@ -20,18 +20,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 let data = await response.json();
 
                 if (response.ok) {
-                    alert("✅ Регистрация успешна! Ваш токен: " + data.token);
+                    alert("Registration completed!");
                     window.location.href = "/";
                 } else {
-                    alert("❌ Ошибка: " + data.message);
+                    alert("Error: " + data.message);
                 }
             } catch (error) {
-                console.error("Ошибка запроса:", error);
-                alert("❌ Ошибка сервера. Попробуйте позже.");
+                console.error("Bad request: ", error);
+                alert("Internal server error, please try again later.");
             }
         });
     } else {
-        console.warn("⚠️ Форма регистрации (#register-form) не найдена!");
+        console.warn("missing register-from.");
     }
 
     // Форма авторизации
@@ -55,17 +55,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 let data = await response.json();
 
                 if (response.ok) {
-                    alert("✅ Авторизация успешна! Ваш токен: " + data.token);
+                    alert("Authorization completed!");
                     window.location.href = "/";
                 } else {
-                    alert("❌ Ошибка: " + data.message);
+                    alert("Error: " + data.message);
                 }
             } catch (error) {
-                console.error("Ошибка запроса:", error);
-                alert("❌ Ошибка сервера. Попробуйте позже.");
+                console.error("Bad request: ", error);
+                alert("Internal server error, please try again later.");
             }
         });
     } else {
-        console.warn("⚠️ Форма авторизации (#auth-form) не найдена!");
+        console.warn("missing auth-form.");
     }
 });
