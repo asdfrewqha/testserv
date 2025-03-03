@@ -28,7 +28,7 @@ section {
   }
 article {
 	padding-top: 5vh;
-    padding-bottom: 3vh;
+    padding-bottom: 1.5vh;
  }
 footer {
     height: 3vh;
@@ -60,6 +60,20 @@ hr {
 	border: 1px solid #f1f1f1;
 	margin-top: 0.5vh;
 	margin-bottom: 0.5vh;
+}
+p {
+	padding-left: 5vw;
+	font-size: 19px;
+}
+h1 {
+	text-align: center;
+	font-size: xx-large;
+}
+/* .test{
+	background: #3f93ff;
+} */
+.toptext {
+	margin-top: 1vh;
 }
 .registration-cssave{
 	padding:50px 0;
